@@ -14,6 +14,7 @@ add_message_files(
   Helm.msg
   Sense.msg
   Status.msg
+  FloatStamped.msg
 )
 
 generate_messages(

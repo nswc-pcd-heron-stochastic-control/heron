@@ -1,6 +1,5 @@
 <launch>
 
-  <arg name="hydro_debug" default="0" />
   <arg name="config" default="base" />
   <arg name="simulation" default="false" />
 
@@ -13,14 +12,14 @@
       <param name="robot_description"
              command="$(find heron_description)/scripts/env_run $(find heron_description)/urdf/configs/$(arg config)
                       $(find xacro)/xacro '$(find heron_description)/urdf/heron.urdf.xacro'
-                      debug:=$(arg hydro_debug) simulation:=$(arg simulation)" />
+                      simulation:=$(arg simulation)" />
     </group>
 
     <group unless="$(eval namespace == '')">
       <param name="robot_description"
              command="$(find heron_description)/scripts/env_run $(find heron_description)/urdf/configs/$(arg config)
                       $(find xacro)/xacro '$(find heron_description)/urdf/heron.urdf.xacro'
-                      debug:=$(arg hydro_debug) simulation:=$(arg simulation)
+                      simulation:=$(arg simulation)
                       namespace:=$(arg namespace) suffix_ns:=$(arg namespace)/" />
     </group>
 
