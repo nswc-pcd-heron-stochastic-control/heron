@@ -36,8 +36,13 @@ This program contains the description of the robot base model for the Clearpath 
   <!-- Create the heron -->
   <xacro:heron_base namespace="$(arg suffix_ns)">
     <gazebo>
+      <!--TODO(acxz): hardcoded namespace param to heron instead of $(arg suffix_ns)-->
       <plugin name="usv_dynamics_heron" filename="libusv_gazebo_dynamics_plugin.so">
-        <xacro:heron_hydro_model namespace="$(arg suffix_ns)" />
+        <xacro:heron_hydro_model namespace="heron" />
+      </plugin>
+      <!--TODO(acxz): hardcoded namespace param to heron instead of $(arg suffix_ns)-->
+      <plugin name="usv_buoyancy_heron" filename="libbuoyancy_gazebo_plugin.so">
+        <xacro:heron_buoyancy_model namespace="heron" />
       </plugin>
 
     </gazebo>

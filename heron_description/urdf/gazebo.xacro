@@ -3,7 +3,7 @@
 
     <xacro:macro name="heron_hydro_model" params="namespace">
 
-      <bodyName>${namespace}base_link</bodyName>
+      <bodyName>${namespace}/base_link</bodyName>
       <!-- Must be same as the ocean model!-->
       <waterLevel>0</waterLevel>
       <waterDensity>997.8</waterDensity>
@@ -28,16 +28,23 @@
       <mQQ>5</mQQ>
       <nR>6</nR>
       <nRR>5</nRR>
-      <!-- General dimensions -->
-      <!-- TODO: hullRadius is an estimation -->
-      <hullRadius>0.15</hullRadius>
-      <boatWidth>1.0</boatWidth>
-      <boatLength>1.35</boatLength>
-      <!-- Length discretization, AKA, "N" -->
-      <length_n>2</length_n>
+
+    </xacro:macro>
+
+    <xacro:macro name="heron_buoyancy_model" params="namespace">
       <!-- Wave model -->
       <wave_model>ocean_waves</wave_model>
+      <fluid_density>997.8</fluid_density>
+      <fluid_level>0</fluid_level>
+      <linear_drag>0</linear_drag>
+      <angular_drag>0</angular_drag>
 
+      <buoyancy>
+        <link_name>${namespace}/base_link</link_name>
+        <geometry>
+          <mesh filename="package://heron_description/meshes/only_hull.stl"/>
+        </geometry>
+      </buoyancy>
     </xacro:macro>
 
 </robot>
