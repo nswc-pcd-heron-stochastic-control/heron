@@ -42,7 +42,7 @@
       <buoyancy>
         <link_name>${namespace}/base_link</link_name>
         <geometry>
-          <mesh filename="package://heron_description/meshes/only_hull.stl"/>
+          <mesh filename="package://heron_description/meshes/heron_collision.stl"/>
         </geometry>
       </buoyancy>
     </xacro:macro>

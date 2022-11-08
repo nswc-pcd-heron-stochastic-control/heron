@@ -9,6 +9,21 @@
   <xacro:macro name="thruster_macro" params="robot_namespace suffix_ns thruster_id *origin simulation:=false">
 
     <!--
+    Dummy link as place holder for the engine frame,
+    since vrx usv_thrust_plugin requires an engine link that can orient the
+    propeller/thruster
+    -->
+    <link name="${suffix_ns}thruster_${thruster_id}_engine_link">
+      <inertial>
+        <mass value="0.001" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.000000017" ixy="0.0" ixz="0.0"
+               iyy="0.000000017" iyz="0.0"
+               izz="0.000000017" />
+      </inertial>
+    </link>
+
+    <!--
     Dummy link as place holder for the thruster frame,
     since thrusters can often be inside the collision geometry
     of the vehicle and may cause internal collisions if set otherwise
@@ -31,23 +46,41 @@
     </link>
 
     <xacro:if value="${simulation}">
-      <!-- Joint between thruster link and vehicle base link -->
-      <joint name="${suffix_ns}thruster_${thruster_id}_joint" type="continuous">
+      <!-- Dummy engine joint for angle command between thruster link and vehicle base link -->
+      <joint name="${suffix_ns}thruster_${thruster_id}_chassis_engine_joint" type="revolute">
+        <!--xacro:insert_block name="origin" /-->
+        <limit lower="0" upper="0" effort="0" velocity="0"/>
+        <parent link="${suffix_ns}base_link" />
+        <child link="${suffix_ns}thruster_${thruster_id}_engine_link" />
+      </joint>
+
+      <!-- Propeller joint for force command between thruster link and vehicle base link -->
+      <joint name="${suffix_ns}thruster_${thruster_id}_engine_propeller_joint" type="continuous">
         <xacro:insert_block name="origin" />
         <axis xyz="1 0 0" />
         <parent link="${suffix_ns}base_link" />
         <child link="${suffix_ns}thruster_${thruster_id}" />
       </joint>
 
+      <gazebo reference="${suffix_ns}thruster_${thruster_id}_engine_link">
+        <selfCollide>false</selfCollide>
+      </gazebo>
+
       <gazebo reference="${suffix_ns}thruster_${thruster_id}">
         <selfCollide>false</selfCollide>
       </gazebo>
     </xacro:if>
     <xacro:unless value="${simulation}">
-      <!-- On the real robot this joint is purely decorative; it's only used to produce thrust in gazebo -->
-      <joint name="${suffix_ns}thruster_${thruster_id}_joint" type="fixed">
+      <!-- Dummy engine joint for angle command between thruster link and vehicle base link -->
+      <joint name="${suffix_ns}thruster_${thruster_id}_chassis_engine_joint" type="fixed">
         <xacro:insert_block name="origin" />
         <parent link="${suffix_ns}base_link" />
+        <child link="${suffix_ns}thruster_${thruster_id}_engine_link" />
+      </joint>
+      <!-- On the real robot this joint is purely decorative; it's only used to produce thrust in gazebo -->
+      <joint name="${suffix_ns}thruster_${thruster_id}_engine_propeller_joint" type="fixed">
+        <xacro:insert_block name="origin" />
+        <parent link="${suffix_ns}thruster_${thruster_id}_engine_link" />
         <child link="${suffix_ns}thruster_${thruster_id}" />
       </joint>
     </xacro:unless>

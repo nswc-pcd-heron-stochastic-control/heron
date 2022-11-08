@@ -11,7 +11,6 @@
   <xacro:property name="rho" value="1028"/>
 
   <!-- Loading vehicle's specific macros -->
-  <!-- TODO -->
   <xacro:include filename="$(find heron_description)/urdf/snippets.xacro"/>
 
   <material name="gray"><color rgba="0.7 0.7 0.7 1.0"/></material>
@@ -105,6 +104,7 @@
     <xacro:insert_block name="gazebo"/>
 
     <!-- Include the thruster modules -->
+    <!-- See: osrf/vrx/wamv_gazebo/urdf/thruster_layouts/wamv_aft_thrusters.xacro -->
     <xacro:thruster_macro robot_namespace="$(arg namespace)" suffix_ns="$(arg suffix_ns)" thruster_id="0"
       simulation="$(arg simulation)">
       <!-- Right Thruster -->
@@ -115,82 +115,49 @@
       <!-- Left Thruster -->
       <origin xyz="-0.53 0.377654 -0.16" rpy="0 0 0" />
     </xacro:thruster_macro>s
-    <!-- TODO -->
     <gazebo>
       <!-- USV Gazebo Thrust plugin -->
-        <plugin name="$(arg namespace)_thruster_model" filename="libusv_gazebo_thrust_plugin.so">
+      <plugin name="heron_thruster_model" filename="libusv_gazebo_thrust_plugin.so">
         <!-- General plugin parameters -->
-        <robotNamespace>$(arg namespace)"</robotNamespace>
+        <robotNamespace>$(arg namespace)</robotNamespace>
         <cmdTimeout>1.0</cmdTimeout>
         <publisherRate>100.0></publisherRate>
 
         <!-- Two thrusters -->
         <thruster>
           <linkName>$(arg suffix_ns)thruster_0</linkName>
-          <!-- TODO -->
-          <!-- propJointName dummy/empty since heron uses jets -->
-          <propJointName>$(arg suffix_ns)thruster_0_joint</propJointName>
-          <!-- engineJointName dummy/empty since heron uses jets -->
-          <engineJointName>$(arg suffix_ns)thruster_0_joint</engineJointName>
-          <cmdTopic>"$(arg suffix_ns)/thruster_0/input"</cmdTopic>
-          <!-- angleTopic empty since heron uses jets -->
+          <propJointName>$(arg suffix_ns)thruster_0_engine_propeller_joint</propJointName>
+          <engineJointName>$(arg suffix_ns)thruster_0_chassis_engine_joint</engineJointName>
+          <cmdTopic>$(arg suffix_ns)thrusters/0/input</cmdTopic>
+          <!-- angleTopic empty since heron cannot rotate it's engine -->
           <angleTopic></angleTopic>
-          <!-- enableAngle false since heron uses jets -->
+          <!-- enableAngle false since heron cannot rotate it's engine -->
           <enableAngle>false</enableAngle>
-          <mappingType>1</mappingType>
-          <maxCmd>100</maxCmd>
-          <maxForceFwd>35</maxForceFwd>
-          <maxForceRev>-35</maxForceRev>
-          <!-- maxAngle of 0 since heron uses jets -->
+          <mappingType>0</mappingType>
+          <maxCmd>1</maxCmd>
+          <minCmd>-1</minCmd>
+          <maxForceFwd>45</maxForceFwd>
+          <maxForceRev>-25</maxForceRev>
+          <!-- maxAngle of 0 since heron cannot rotate it's engine -->
           <maxAngle>0</maxAngle>
         </thruster>
         <thruster>
           <linkName>$(arg suffix_ns)thruster_1</linkName>
-          <!-- TODO -->
-          <!-- propJointName dummy/empty since heron uses jets -->
-          <propJointName>$(arg suffix_ns)thruster_1_joint</propJointName>
-          <!-- engineJointName dummy/empty since heron uses jets -->
-          <engineJointName>$(arg suffix_ns)thruster_1_joint</engineJointName>
-          <cmdTopic>"$(arg suffix_ns)/thruster_1/input"</cmdTopic>
-          <!-- angleTopic empty since heron uses jets -->
+          <propJointName>$(arg suffix_ns)thruster_1_engine_propeller_joint</propJointName>
+          <engineJointName>$(arg suffix_ns)thruster_1_chassis_engine_joint</engineJointName>
+          <cmdTopic>$(arg suffix_ns)thrusters/1/input</cmdTopic>
+          <!-- angleTopic empty since heron cannot rotate it's engine -->
           <angleTopic></angleTopic>
-          <!-- enableAngle false since heron uses jets -->
+          <!-- enableAngle false since heron cannot rotate it's engine -->
           <enableAngle>false</enableAngle>
-          <mappingType>1</mappingType>
-          <maxCmd>100</maxCmd>
-          <maxForceFwd>35</maxForceFwd>
-          <maxForceRev>-35</maxForceRev>
-          <!-- maxAngle of 0 since heron uses jets -->
+          <mappingType>0</mappingType>
+          <maxCmd>1</maxCmd>
+          <minCmd>-1</minCmd>
+          <maxForceFwd>45</maxForceFwd>
+          <maxForceRev>-25</maxForceRev>
+          <!-- maxAngle of 0 since heron cannot rotate it's engine -->
           <maxAngle>0</maxAngle>
         </thruster>
-
-
-        <!-- Name of the joint between thruster and vehicle base link -->
-        <!--jointName>${suffix_ns}thruster_${thruster_id}_joint</jointName-->
-
-        <!-- FIXME: skip for now -->
-        <!-- Minimum allowed value for the input signal for thruster unit -->
-        <clampMin>-100</clampMin>
-
-        <!-- FIXME: skip for now -->
-        <!-- 2) First order model -->
-        <dynamics>
-          <type>FirstOrder</type>
-          <timeConstant>0.05</timeConstant>
-        </dynamics>
-
-        <!-- FIXME: skip for now -->
-        <!-- 3) Linear interpolation
-        If you have access to the thruster's data sheet, for example,
-        you can enter samples of the curve's input and output values
-        and the thruster output will be found through linear interpolation
-        of the given samples.
-        -->
-        <conversion>
-          <type>LinearInterp</type>
-          <inputValues>-1.0 -0.8 -0.6 -0.4 -0.2 0 0.2 0.4 0.6 0.8 1.0</inputValues>
-          <outputValues>-19.88 -16.52 -12.6 -5.6 -1.4 0.0 2.24 9.52 21.28 28.0 33.6</outputValues>
-        </conversion>
 
       </plugin>
     </gazebo>
