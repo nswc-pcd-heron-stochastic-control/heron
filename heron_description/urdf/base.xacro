@@ -128,7 +128,7 @@
           <linkName>$(arg suffix_ns)thruster_0</linkName>
           <propJointName>$(arg suffix_ns)thruster_0_engine_propeller_joint</propJointName>
           <engineJointName>$(arg suffix_ns)thruster_0_chassis_engine_joint</engineJointName>
-          <cmdTopic>$(arg suffix_ns)thrusters/0/input</cmdTopic>
+          <cmdTopic>/heron/thrusters/0/input</cmdTopic>
           <!-- angleTopic empty since heron cannot rotate it's engine -->
           <angleTopic></angleTopic>
           <!-- enableAngle false since heron cannot rotate it's engine -->
@@ -145,7 +145,7 @@
           <linkName>$(arg suffix_ns)thruster_1</linkName>
           <propJointName>$(arg suffix_ns)thruster_1_engine_propeller_joint</propJointName>
           <engineJointName>$(arg suffix_ns)thruster_1_chassis_engine_joint</engineJointName>
-          <cmdTopic>$(arg suffix_ns)thrusters/1/input</cmdTopic>
+          <cmdTopic>/heron/thrusters/1/input</cmdTopic>
           <!-- angleTopic empty since heron cannot rotate it's engine -->
           <angleTopic></angleTopic>
           <!-- enableAngle false since heron cannot rotate it's engine -->
